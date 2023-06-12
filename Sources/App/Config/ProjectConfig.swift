@@ -13,7 +13,9 @@ struct ProjectConfig {
   }
 
   struct SIWA {
-    static let applicationIdentifier = Environment.get("SIWA_APPLICATION_IDENTIFIER")! //e.g. com.raywenderlich.siwa-vapor
+    static let applicationIdentifier = Environment.get("SIWA_APPLICATION_IDENTIFIER")! //e.g.
+                       
+      //com.raywenderlich.siwa-vapor
     static let servicesIdentifier = Environment.get("SIWA_SERVICES_IDENTIFIER")! //e.g. com.raywenderlich.siwa-vapor.services
     static let redirectURL = Environment.get("SIWA_REDIRECT_URL")! // e.g. https://foobar.ngrok.io/web/auth/siwa/callback
   }

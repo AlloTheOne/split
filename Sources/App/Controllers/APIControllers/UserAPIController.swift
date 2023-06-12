@@ -8,6 +8,7 @@
 import Fluent
 import JWT
 import Vapor
+import APNSwift
 
 struct UserAPIController {
     //to return user info
@@ -16,7 +17,15 @@ struct UserAPIController {
         let user = try req.auth.require(User.self)
         return try .init(user: user)
     }
-    
+    // api/users/:id
+    func getUserByID(req: Request) throws -> EventLoopFuture<User> {
+        let user = try req.auth.require(User.self)
+        let userID = req.parameters.get("id", as: UUID.self)
+        return User.find(userID, on: req.db)
+            .unwrap(orError: Abort(.notFound))
+            //.encodeResponse(for: req)
+        
+    }
     //put user to post phone number
     // api/users/me/addphone
     func updateUserToAddPhoneNumber(req: Request) async throws -> User {
@@ -62,8 +71,10 @@ struct UserAPIController {
     extension UserAPIController: RouteCollection {
         func boot(routes: Vapor.RoutesBuilder) throws {
           routes.get("me", use: getMeHandler)
+            routes.get(":id" , use: getUserByID)
           routes.patch("me", "addphone" ,use: updateUserToAddPhoneNumber)
           routes.get("allaroundorder",":orderid" , use: getUsersAroundOrder)
+         
        
       }
     }

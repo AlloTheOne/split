@@ -8,7 +8,7 @@
 import Fluent
 import JWT
 import Vapor
-
+import APNS
 struct SIWAAPIController {
 
   struct SIWARequestBody: Content {
@@ -66,6 +66,7 @@ struct SIWAAPIController {
           guard let accessToken = try? user.createAccessToken(req: req) else {
             return req.eventLoop.future(error: Abort(.internalServerError))
           }
+            
           return accessToken.save(on: req.db)
             .flatMapThrowing { try .init(accessToken: accessToken, user: user) }
       }
@@ -104,5 +105,6 @@ struct SIWAAPIController {
 extension SIWAAPIController: RouteCollection {
   func boot(routes: RoutesBuilder) throws {
     routes.post(use: authHandler)
+    
   }
 }

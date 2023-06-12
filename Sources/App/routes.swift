@@ -1,7 +1,16 @@
 import Fluent
 import Vapor
-
+import APNS
 func routes(_ app: Application) throws {
+    let alert = APNSwiftAlert(
+        title: "Hey There",
+        subtitle: "Full moon sighting",
+        body: "There was a full moon last night did you see it"
+    )
+    app.get("test-push") { req async throws -> HTTPStatus in
+         req.apns.send(alert, to: "000246.e46245144a274a4eafc42dc0e1291d95.0755")
+        return .ok
+    }
   let unprotectedAPI = app.grouped("api")
   try unprotectedAPI.grouped("auth", "siwa").register(collection: SIWAAPIController())
 
